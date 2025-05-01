@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>黑洞任務：宇宙真相追蹤</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2em; background-color: #000; color: #fff; }
+    .hidden { display: none; }
+    button { padding: 0.6em 1.2em; font-size: 1em; margin-top: 1em; cursor: pointer; }
+    .content { max-width: 600px; margin: auto; }
+  </style>
+</head>
+<body>
+  <div id="start-page" class="content">
+    <h1>黑洞任務：宇宙真相追蹤</h1>
+    <p>歡迎來到黑洞任務！破解 8 個宇宙之謎，完成任務學習黑洞相關知識，看看你能拿幾分？</p>
+    <button onclick="startGame()">開始遊戲</button>
+  </div>
+
+  <div id="question-page" class="content hidden">
+    <h2 id="question-title"></h2>
+    <p id="question-text"></p>
+    <div id="options"></div>
+  </div>
+
+  <div id="feedback-page" class="content hidden">
+    <h3 id="feedback-message"></h3>
+    <p id="feedback-explanation"></p>
+    <button onclick="showKnowledgePage()">繼續</button>
+  </div>
+
+  <div id="knowledge-page" class="content hidden">
+    <h3>任務解析</h3>
+    <p id="knowledge-text"></p>
+    <button onclick="nextQuestion()">下一關</button>
+  </div>
+
+  <div id="result-page" class="content hidden">
+    <h2>任務結算</h2>
+    <p>你總共獲得 <span id="score"></span> 分！</p>
+    <p id="result-comment"></p>
+    <h4>成績評語對照</h4>
+    <ul style="text-align: left">
+      <li>8 分：黑洞學者！你掌握了宇宙的祕密。</li>
+      <li>6-7 分：黑洞探索者！再努力一點就能破解全謎。</li>
+      <li>3-5 分：太空學徒，已踏出探索第一步。</li>
+      <li>0-2 分：初學者，再接再厲，黑洞不會等人！</li>
+    </ul>
+    <button onclick="restartGame()">重新開始</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        title: "重力的第一步",
+        question: "牛頓與愛因斯坦對重力的理解有何差異？",
+        options: [
+          "牛頓認為重力是一種磁力，愛因斯坦認為是推力",
+          "牛頓認為重力是時空彎曲，愛因斯坦認為是力的吸引",
+          "牛頓認為重力是萬有引力，愛因斯坦認為是時空彎曲造成物體運動改變",
+          "兩人都認為重力來自地球旋轉"
+        ],
+        answer: 2,
+        feedback: "正確！愛因斯坦認為重力其實是時空彎曲造成的運動路徑變化。",
+        explanation: "牛頓的萬有引力說明了物體彼此吸引的力，但愛因斯坦則認為，重力其實是因為物體使周圍的時空彎曲，其他物體在這彎曲的時空中行走，路徑因此改變，就像是被『吸引』過去一樣。",
+        knowledge: "愛因斯坦的廣義相對論提供了重力的新解釋：它不是一種神祕的力，而是物體使四維時空彎曲的結果。這種彎曲影響其他物體的運動，就像球體放在橡膠布上會讓其他小球向它滾去一樣。這讓我們能夠解釋更複雜的天文現象，如黑洞與時間膨脹。"
+      },
+      // 可陸續加入更多題目
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function startGame() {
+      document.getElementById("start-page").classList.add("hidden");
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[current];
+      document.getElementById("question-page").classList.remove("hidden");
+      document.getElementById("question-title").innerText = `第 ${current + 1} 關：${q.title}`;
+      document.getElementById("question-text").innerText = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = () => answerQuestion(i);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function answerQuestion(choice) {
+      document.getElementById("question-page").classList.add("hidden");
+      document.getElementById("feedback-page").classList.remove("hidden");
+      const q = questions[current];
+      const correct = choice === q.answer;
+      if (correct) score++;
+      document.getElementById("feedback-message").innerText = correct ? "答對了！" : "答錯了";
+      document.getElementById("feedback-explanation").innerText = q.feedback;
+    }
+
+    function showKnowledgePage() {
+      document.getElementById("feedback-page").classList.add("hidden");
+      document.getElementById("knowledge-page").classList.remove("hidden");
+      document.getElementById("knowledge-text").innerText = questions[current].knowledge;
+    }
+
+    function nextQuestion() {
+      document.getElementById("knowledge-page").classList.add("hidden");
+      current++;
+      if (current >= questions.length) {
+        showResult();
+      } else {
+        showQuestion();
+      }
+    }
+
+    function showResult() {
+      document.getElementById("result-page").classList.remove("hidden");
+      document.getElementById("score").innerText = score;
+      let comment = "";
+      if (score === 8) comment = "黑洞學者！你掌握了宇宙的祕密。";
+      else if (score >= 6) comment = "黑洞探索者！再努力一點就能破解全謎。";
+      else if (score >= 3) comment = "太空學徒，已踏出探索第一步。";
+      else comment = "初學者，再接再厲，黑洞不會等人！";
+      document.getElementById("result-comment").innerText = comment;
+    }
+
+    function restartGame() {
+      current = 0;
+      score = 0;
+      document.getElementById("result-page").classList.add("hidden");
+      startGame();
+    }
+  </script>
+</body>
+</html>
