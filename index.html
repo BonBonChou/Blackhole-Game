@@ -32,7 +32,7 @@
       color: white;
       transition: background 0.3s ease;
     }
-    button:hover { background: #63b3ed; }
+    button:hover { background: #d0b5ff; }
     .choice-btn {
       display: block;
       margin: 1em auto;
@@ -71,6 +71,7 @@
     .intro {
       text-align: left;
       margin-bottom: 0em;
+      
       background: rgba(255,255,255,0.05);
       padding: 0.5em;
       border-radius: 10px;
@@ -87,7 +88,33 @@
       line-height: 1.6;
       margin-bottom: 1em;
     }
-    
+    #question-intro {
+      margin-top: -1.5em;
+      margin-bottom: 0em;
+    }
+    #feedback-title {
+      font-size: 2em;  /* 你可以依需求調整數值 */
+      font-weight: bold; /* 也可以設為 normal, lighter 等 */
+      margin-bottom: 0.5em;
+      color: #9a42ff;
+    }
+    #feedback-text {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+    #knowledge-title {
+      font-size: 2em;  /* 你可以依需求調整數值 */
+      font-weight: bold; /* 也可以設為 normal, lighter 等 */
+      margin-bottom: 0.5em;
+      color: #9a42ff;
+    }
+    #knowledge-text {
+      font-size: 1.5em;
+      line-height: 1.6;
+      margin-bottom: 1em;
+      text-align: justify;
+    }
     #final-feedback {
       font-size: 2em;
       margin: 1em 0;
@@ -149,6 +176,9 @@
   <!-- 問題頁 -->
   <div id="question-screen" class="hidden">
     <h2 id="question-title"></h2>
+    <div class="intro">
+      <p id="question-intro"></p>      
+    </div>
     <p style="text-align: justify;" id="question-text"></p>
     <div id="options-container"></div>
   </div>
@@ -160,7 +190,7 @@
   </div>
 
   <div class="hidden" id="knowledge-screen">
-    <h3>知識補充</h3>
+    <h3 id="knowledge-title">知識補充</h3>
     <p id="knowledge-text"></p>
     <button onclick="nextQuestion()">下一關</button>
   </div>
@@ -186,16 +216,22 @@
     const questions = [
       {
         title: "第 1 關：重力的第一步",
-        question: "關於牛頓與愛因斯坦對重力的看法，下列何者正確？",
+        intro: `
+          🔎 任務簡報
+          一艘太空探測器靠近一顆陌生行星時出現了奇怪的現象，我們從太空站收到這些紀錄，請幫忙判斷是什麼重力理論最適合解釋它。
+          📁 調查資料
+          「探測器一開始直直飛，但靠近行星時，它開始被吸引並繞著行星旋轉，就像月亮繞地球那樣。我們的時鐘顯示沒什麼變化。」
+        `,
+        question: "你覺得最適合解釋這個現象的是哪一種重力理論？",
         options: [
-          "牛頓認為重力是由質量產生的吸引力，愛因斯坦認為重力是因時空彎曲而產生的現象。",
-          "兩人都認為重力是由重元素產生的吸引力。",
-          "牛頓與愛因斯坦都主張光不會受到重力影響。",
-          "愛因斯坦否定了牛頓的重力理論，主張宇宙中沒有重力。"
+          "牛頓的萬有引力：有質量的東西會彼此吸引",
+          "狹義相對論：描述高速移動時時間會變慢",
+          "廣義相對論：重力會讓時空彎曲",
+          "黑洞理論：描述黑洞和它發出的能量"
         ],
         answerIndex: 0,
         feedback: "牛頓認為重力是物體間的吸引力，而愛因斯坦則認為重力是物體使時空彎曲後的結果，兩者理論基礎不同但都很重要。",
-        knowledge: "牛頓在17世紀提出萬有引力定律，成功解釋了行星運動；但到了20世紀，愛因斯坦的廣義相對論指出重力並不是一種真正的「力」，而是質量使周圍的時空彎曲，物體在彎曲的時空中運動才呈現出被『吸引』的效果。這為我們理解極端天體如黑洞奠定基礎。"
+        knowledge: "牛頓在17世紀提出萬有引力定律，成功解釋了行星運動；但到了20世紀，愛因斯坦的廣義相對論指出重力並不是一種真正的「力」，而是質量使周圍的時空彎曲，物體在彎曲的時空中運動才呈現出被『吸引』的效果。這為我們理解緻密天體如黑洞奠定基礎。"
       }
     ];
 
@@ -207,10 +243,18 @@
       showQuestion();
     }
 
+    function formatIntro(intro) {
+  		return intro
+      .replace(/🔎 任務簡報/, '<strong>🔎 任務簡報</strong><br>')
+      .replace(/📁 調查資料/, '<br><strong>📁 調查資料</strong><br>')
+      .replace(/\n/g, '<br>') // 若你 intro 裡是用換行符號斷行，也可以加這行
+      .replace(/\s{2,}/g, ''); // 清除多餘空白
+  	}
     function showQuestion() {
       const q = questions[currentQuestion];
       document.getElementById("question-screen").classList.remove("hidden");
       document.getElementById("question-title").textContent = q.title;
+			document.getElementById("question-intro").innerHTML = formatIntro(questions[currentQuestion].intro);
       document.getElementById("question-text").textContent = q.question;
       const optionsContainer = document.getElementById("options-container");
       optionsContainer.innerHTML = "";
@@ -222,6 +266,7 @@
         optionsContainer.appendChild(btn);
       });
     }
+
 
     function checkAnswer(selectedIndex) {
       document.getElementById("question-screen").classList.add("hidden");
