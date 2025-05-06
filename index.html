@@ -168,6 +168,25 @@
       display: none;
     }
     
+    #final-highlight {
+      font-size: 1.3em;
+      margin: 1em 0;
+      font-weight: bold;
+      text-align: center;
+      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet, red);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 2s ease infinite;
+    }
+    h6 {
+      font-size: 1.2em;
+      margin: 1em 0;
+      text-align: justify;
+      color: #9a42ff;
+      text-align: center;
+    }
+    
     @keyframes rainbow {
       0% { background-position: 100% 50%; }
       50% { background-position: 0% 50%; }
@@ -212,7 +231,13 @@
     <h3 id="knowledge-title">知識補充</h3>
     <p id="knowledge-text"></p>
     <div id="info-link" class="hidden" style="margin-top: 1em;"></div>
-    <button onclick="nextQuestion()">下一關</button>
+    <button onclick="nextQuestion()">下一頁</button>
+  </div>
+  <!-- 結尾頁 -->
+  <div id="final-message-screen" class="hidden">
+    <h6>你成功解析了探測器傳回的所有紀錄。<br>從恆星的誕生與死亡，<br>到黑洞的觀測與蒸發，<br>每一關都揭示了宇宙運行的基本規律。<br>這些資料將為後續研究提供關鍵線索。<br>宇宙仍有許多未知等待被發現——<br>任務結束，但探索永無止境。</h6>
+    <h2 id="final-highlight">未來的調查員，會以你的分析為起點，<br>繼續追尋宇宙的更深層真相。</h2>
+    <button onclick="showResult()">下一頁</button>
   </div>
   <!-- 結算頁 -->
   <div class="hidden" id="result-screen">
@@ -555,11 +580,12 @@
       if (currentQuestion < questions.length) {
         showQuestion();
       } else {
-        showResult();
+    		document.getElementById("final-message-screen").classList.remove("hidden");
       }      
     }
 
     function showResult() {
+    document.getElementById("final-message-screen").classList.add("hidden");
       document.getElementById("result-screen").classList.remove("hidden");
       document.getElementById("final-score").textContent = `你的總分：${score}/8`;
       let feedback = "";
