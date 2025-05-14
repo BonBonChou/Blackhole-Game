@@ -518,7 +518,7 @@
       const q = questions[currentQuestion];
       document.getElementById("question-screen").classList.remove("hidden");
       document.getElementById("question-title").textContent = q.title;
-			document.getElementById("question-intro").innerHTML = formatIntro(questions[currentQuestion].intro);
+      document.getElementById("question-intro").innerHTML = formatIntro(questions[currentQuestion].intro);
       document.getElementById("question-text").textContent = q.question;
       const optionsContainer = document.getElementById("options-container");
       optionsContainer.innerHTML = "";
