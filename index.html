@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Noto Sans TC', sans-serif;
-      background: linear-gradient(to right, #211134, #211036, #1c0b2f);
+      background: transparent;/*linear-gradient(to right, #211134, #211036, #1c0b2f);*/
       color: #fff;
       text-align: center;
       padding: 2em;
@@ -255,7 +255,7 @@
         <li>10 分：宇宙奧秘大師！你已掌握宇宙的關鍵祕密！</li>
       </ul>
     </div>
-    <button onclick="location.reload()">重新開始</button>
+    <button onclick="restartGame()">重新開始</button>
   </div>
 </div>
   <script>
@@ -600,6 +600,21 @@
       else if (score >= 3) feedback = "好開始是成功的一半，繼續追尋宇宙的奧祕吧！";
       else feedback = "每次嘗試都更靠近真相，歡迎再次挑戰！";
       document.getElementById("final-feedback").textContent = feedback;
+    }
+    function restartGame() {
+      // 重設變數
+      currentQuestion = 0;
+      score = 0;
+
+      // 隱藏所有畫面
+      document.getElementById("result-screen").classList.add("hidden");
+      document.getElementById("final-message-screen").classList.add("hidden");
+      document.getElementById("feedback-screen").classList.add("hidden");
+      document.getElementById("knowledge-screen").classList.add("hidden");
+      document.getElementById("question-screen").classList.add("hidden");
+
+      // 顯示開始畫面
+      document.getElementById("start-screen").classList.remove("hidden");
     }
   </script>
 </body>
